@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>Scott Brownlie Interior Design</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom styles for this template -->
+    <link href="css/scottbrownlie.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+
+</head>
+<body>
+<script>
+    console.log( window.location.href );
+    console.log( window.location.protocol );
+    console.log( window.location.host );
+    console.log( window.location.pathname );
+    var baseUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+    var activePage = "home";
+    console.log( baseUrl );
+    var str = window.location.search;
+    if (str.length && str.charAt(0) == "?") {
+        //remove leading ?
+        str = str.substr(1);
+    }
+    var srch = "";
+    var res = str.split("&");
+    for (i = 0; i < res.length; i++) {
+        console.log(res[i]);
+        var prm = res[i].split("=");
+        if ( prm[0] == "p" ) {
+            // keep current page as separate variable
+            activePage = prm[1];
+            console.log( activePage );
+        } else {
+            // add all other parameters back into url
+            if (srch.length) {
+                srch = srch + "&" + res[i];
+            } else {
+                srch = srch + "?" + res[i];
+            }
+        }
+    }
+    baseUrl = baseUrl + srch;
+    console.log( baseUrl );
+</script>
+
+<div id="header"></div>
+<div id="content"></div>
+<div id="footer"></div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery.min.js"><\/script>')</script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script>
+    $(document).ready(function() {
+
+        loadContent("#header", "partials/header.html");
+
+        switch (activePage) {
+            case "home":
+                loadContent("#content", "partials/carousel.html");
+                loadContent("#content", "partials/cta.html");
+                loadContent("#content", "partials/designideas.html");
+                break;
+            case "portfolio":
+                loadContent("#content", "partials/portfolio.html");
+                break;
+            case "portfolio/masterbedroom":
+                loadContent("#content", "partials/portfolio-masterbedroom.html");
+                break;
+            case "portfolio/sparebedroom":
+                loadContent("#content", "partials/portfolio-sparebedroom.html");
+                break;
+            case "design-ideas":
+                loadContent("#content", "partials/designideas.html");
+                break;
+            case "design-ideas/bestofbritish":
+                loadContent("#content", "partials/designideas-bestofbritish.html");
+                break;
+            case "design-ideas/coastaldiningroom":
+                loadContent("#content", "partials/designideas-coastaldiningroom.html");
+                break;
+            case "design-ideas/hygge":
+                loadContent("#content", "partials/designideas-hygge.html");
+                break;
+            case "about":
+                loadContent("#content", "partials/about.html");
+                break;
+            case "services":
+                loadContent("#content", "partials/services.html");
+                break;
+            case "contact":
+                loadContent("#content", "partials/contact.html");
+                break;
+            default:
+            //display 404 page
+        }
+
+        loadContent("#footer", "partials/footer.html");
+
+        // Highlight cur page on nav menu
+        $("#" + activePage).addClass("active");
+    });
+
+    function loadContent(element, filename) {
+        $.get(filename, function(data) {
+            $(element).append(data);
+        })
+            .done(function() {
+                $(element + " a").each(function () {
+                    url = $(this).attr('href');
+                    console.log("checking " + url);
+                    if (url.length && url.charAt(0) == "/") {
+                        // Update href
+                        newUrl = baseUrl;
+                        if (url.length > 1) {
+                            newUrl = baseUrl + "&p=" + url.substr(1);
+                        }
+                        $(this).attr('href', newUrl);
+                        console.log("set to " + $(this).attr('href'));
+                    }
+                });
+            });
+    }
+</script>
+</body>
+</html>
